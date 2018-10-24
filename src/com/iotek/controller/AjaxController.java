@@ -20,6 +20,7 @@ public class AjaxController {
 
         user.setUserid(1);
         user.setUsername("aaa");
+        System.out.println(1);
         return user;
     }
 }
