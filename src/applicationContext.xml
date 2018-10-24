@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<context:component-scan base-package="com.iotek"></context:component-scan>
+	<!--
+		springMVC基于注解
+	 -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<!--
+	视图解析器的配置
+ 	-->
+	<bean
+			class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!--
+			prefix : 视图页面文件所在的路径的目录部分
+			suffix : 视图页面文件的后缀名
+		 -->
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!--
+           配置资源映射
+           web.xml dispatcherServlet 对应的url-pattern，设置为/
+           结果就是所有的请求都要经过springmvc的处理，问题：XX.jpg，springmvc不认为这是要请求
+           一副图片，而是会把这个请求与RequestMapping中的路径匹配
+           所以你需要把这些静态资源的请求从springmvc中移除去，不让springmvc去处理
+
+           location : 文件真实存放的路径
+           mapping ：访问文件的请求的url路径
+   -->
+	<mvc:resources location="/css/" mapping="/css/**"/>
+	<mvc:resources location="/js/" mapping="/js/**"/>
+	<mvc:resources location="/images/" mapping="/images/**"/>
+
+	<!--针对于ajax返回字符串中文乱码的字符转换器-->
+	<!--要注册到mvc的converters-->
+	<bean id="stringConverter"
+		  class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/plain;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>
